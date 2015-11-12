@@ -1,10 +1,39 @@
 from tracker import Tracker
+from store import Store
 
 class Solver:
 
     def __init__(self, checker, size: int):
         self.checker = checker
         self.size = size
+
+    def all(self, data):
+        solutions = Store()
+
+        tracker = Tracker()
+
+        final = self.size - 1
+
+        pos = (0, 0)
+
+        try:
+            while True:
+                if (data[pos[0]][pos[1]] == 0):
+                    pos, data = self.attempt(pos, data, tracker)
+
+                if (pos[0] == final and pos[1] == final):
+                    solutions.add(data)
+                    pos, data = self.attempt(pos, data, tracker)
+
+                if (pos[1] == final):
+                    pos = (pos[0] + 1, 0)
+                else:
+                    pos = (pos[0], pos[1] + 1)
+        except Exception as e:
+            if (str(e) != 'There is no solution!'):
+                raise e
+
+        return solutions.all()
 
     def solve(self, data):
         tracker = Tracker()
